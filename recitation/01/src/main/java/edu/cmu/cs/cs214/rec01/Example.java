@@ -24,7 +24,7 @@ public final class Example {
     ArrayList<Integer> integerList;
     integerList = new ArrayList<>();
     for (int i = 0 ; i < size+1 ; i++) {
-      integerList.add(i + 1);
+      integerList.add(i);
       System.out.println(integerList.get(i));
     }
     return integerList;
