@@ -19,10 +19,15 @@ public final class Example {
    *         Positive size of the <code>ArrayList</code> to create and print
    * @return A list whose elements in order are 1..size
    */
+  @SuppressWarnings("checkstyle:EmptyBlock")
   public List<Integer> printList(int size) {
     ArrayList<Integer> integerList;
-    // TODO: IMPLEMENT ME
-    return null;
+    integerList = new ArrayList<>();
+    for (int i = 0 ; i < size+1 ; i++) {
+      integerList.add(i + 1);
+      System.out.println(integerList.get(i));
+    }
+    return integerList;
   }
 
 }
