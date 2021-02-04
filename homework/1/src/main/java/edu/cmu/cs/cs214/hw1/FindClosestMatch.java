@@ -125,13 +125,16 @@ public class FindClosestMatch {
      * @param index the index of website to be matched
      * @return double, similarity
      */
-    public double backwardMatch(int index) {
+    public double bestMatchForI(int index) {
         if(index >= this.listLength){
             return 0.0;
         }
         double maxSim = 0.0;
         Document doc1 = getDoc(index);
-        for( int i = index + 1; i < this.listLength; i++){
+        for( int i = 0; i < this.listLength; i++){
+            if(i == index ){
+                continue;
+            }
             Document doc2 = getDoc(i);
             double temp = doc1.cosineSimilarity(doc2);
             if( temp > maxSim){
@@ -141,6 +144,12 @@ public class FindClosestMatch {
             }
         }
         return maxSim;
+    }
+
+    public double cosSimBetween(int index1, int index2){
+        Document doc1 = getDoc(index1);
+        Document doc2 = getDoc(index2);
+        return doc1.cosineSimilarity(doc2);
     }
 
     /**
@@ -166,8 +175,7 @@ public class FindClosestMatch {
     String url2 = fcm.getUrl(index[1]);
 
     System.out.printf("The two most similar URLs are:\n%s\n%s\nCosine Similarity = %f",url1,url2,cosSim);
-    System.out.printf("\nWebsite1 content:\n%s",url1.toString());
-    System.out.printf("\nWebsite2 content:\n%s",url2.toString());
-
+//    System.out.printf("\nWebsite1 content:\n%s",fcm.getDoc(index[0]).toString());
+//    System.out.printf("\nWebsite2 content:\n%s",fcm.getDoc(index[1]).toString());
   }
 }
