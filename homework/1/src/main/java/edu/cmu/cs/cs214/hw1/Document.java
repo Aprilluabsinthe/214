@@ -8,14 +8,15 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * @Author: dilu
+ * @author dilu
  * Class Document
- * @brief: this class is designed to store url string and caculate cosine similarity
- * @member: HashMap to store word and frequency
- * @instances: has instance to calculate cosine similarity with another Document object
+ * this class is designed to store url string and caculate cosine similarity
+ * HashMap to store word and frequency
+ * has instance to calculate cosine similarity with another Document object
  * */
 public class Document {
     private Map<String,Integer> urlMap;
+    private double sumSquare;
 
     /**
      * class constructor
@@ -40,6 +41,13 @@ public class Document {
             urlMap.put( content, urlMap.getOrDefault(content,0) + 1);
         }
         in.close();
+
+        // initial SumSquare
+        double norminator = 0;
+        for(Integer value : urlMap.values()){
+            norminator += value * value;
+        }
+        this.sumSquare = Math.sqrt(norminator);
     }
 
     /**
@@ -52,7 +60,16 @@ public class Document {
     }
 
     /**
-     * @methor consineSimilarity
+     * get private member UrlMap
+     * @return the HashMap
+     */
+    public double getSumSquare() {
+        double ss = sumSquare;
+        return ss;
+    }
+
+    /**
+     * consine Similarity
      * @param urlCompare the new url to be calculated with
      * @return double cosine similarity
     * */
@@ -71,27 +88,13 @@ public class Document {
 
         // calculate nominator
         double norminizor = 0;
-        double normOriginal = getSumSqrt(urlMap);
-        double normCompare = getSumSqrt(urlCompareMap);
+        double normOriginal = this.sumSquare;
+        double normCompare = urlCompare.getSumSquare();
         norminizor = normOriginal * normCompare;
 
         // calculate results
         return (double)divider/norminizor;
 
-    }
-
-    /**
-     * calculate norminator
-     * @param map HashMap map, keys are String wors, values are Integer
-     * @return double, sqrt(sum(ele^2))
-     */
-    public double getSumSqrt(Map<String, Integer> map){
-        double norminator = 0;
-        for(Integer value : urlMap.values()){
-            norminator += value * value;
-        }
-        double sqrt = Math.sqrt(norminator);
-        return sqrt;
     }
 
     @Override
