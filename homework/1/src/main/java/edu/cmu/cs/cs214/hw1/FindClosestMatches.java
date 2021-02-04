@@ -1,9 +1,7 @@
 package edu.cmu.cs.cs214.hw1;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The closest match to each document in a set
@@ -11,15 +9,19 @@ import java.util.Map;
 public class FindClosestMatches {
     private FindClosestMatch fcm;
     private List<Double> cossimList;
-    private Map<String,String> bestmatches;
+    private List<Integer> bestmatches;
+    private double[][] cachedResults;
+
+    public static final double SELF= -10.0;
 
     /**
      * default constructor
      */
     public FindClosestMatches(){
-        this.cossimList = new ArrayList<Double>();
         this.fcm = new FindClosestMatch();
-        this.bestmatches = new HashMap<>();
+        this.cossimList = new ArrayList<Double>();
+        this.bestmatches = new ArrayList<Integer>();
+        this.cachedResults = new double[1][1];
     }
 
     /**
@@ -27,9 +29,10 @@ public class FindClosestMatches {
      * @param websites the websites to be copies
      */
     public FindClosestMatches(String[] websites){
-        fcm = new FindClosestMatch(websites);
-        cossimList = new ArrayList<Double>();
-        this.bestmatches = new HashMap<>();
+        this.fcm = new FindClosestMatch(websites);
+        this.cossimList = new ArrayList<Double>();
+        this.bestmatches = new ArrayList<Integer>();
+        this.cachedResults = new double[websites.length][websites.length];
     }
 
     /**
@@ -88,27 +91,55 @@ public class FindClosestMatches {
 
     /**
      * for visit bestmatches map
-     * @return Map bestmatches
+     * @param index the given index
+     * @return int bestmatches
      */
-    public Map<String,String> getMap() {
-        return this.bestmatches;
+    public int getMacth(int index) {
+        return this.bestmatches.get(index);
     }
 
     /**
+     * use existes class
      * put cosine similarity information into map
      */
-    public void putMap(){
+    public void putPair(){
         int numurl = getListLength();
         for(int i = 0 ; i < numurl ; i++){
-            double cossimi = this.fcm.backwardMatch(i);
+            double cossimi = this.fcm.bestMatchForI(i);
             int[] index = this.fcm.getMinIndex();
-            if( !bestmatches.containsValue(index[0])){
-                this.bestmatches.put(this.fcm.getUrl(index[0]) , this.fcm.getUrl(index[1]));
-                this.bestmatches.put(this.fcm.getUrl(index[1]) , this.fcm.getUrl(index[0]));
-                this.cossimList.add(cossimi);
-                this.cossimList.add(cossimi);
+            this.bestmatches.add(index[0],index[1]);
+            this.cossimList.add(index[0],cossimi);
+        }
+    }
+
+    /**
+     * iterate way to calcute answer
+     * with O(n*(n-1)/2)
+     */
+    public void iterCalc(){
+        int numurl = getListLength();
+        for(int i = 0 ; i < numurl ; i++){
+            for(int j = 0 ; j < numurl ; j++){
+                if( j < i ){
+                    cachedResults[i][j] = cachedResults[j][i];
+                }
+                else if( j == i){
+                    cachedResults[i][j] = SELF;
+                }
+                else if( j > i ){
+                    double temp = fcm.cosSimBetween(i,j);
+                    cachedResults[i][j] = temp;
+                }
             }
         }
+    }
+
+    /**
+     * get method for cachedResults
+     * @return double[][]
+     */
+    public double[][] getCachedResults() {
+        return cachedResults;
     }
 
     /**
@@ -130,11 +161,30 @@ public class FindClosestMatches {
                 "https://en.wikipedia.org/wiki/Twelve_Point_Buck",
                 "https://en.wikipedia.org/wiki/UK_Independent_Singles_and_Albums_Charts",
         };
+
         FindClosestMatches fcms = new FindClosestMatches(websites);
-        fcms.putMap();
-        int index = 0;
-        for( Map.Entry<String,String> entry: fcms.getMap().entrySet()){
-            System.out.printf("\nthe best matches for url:%s\nis url:%s\nwith cosine similarity:%f\n", entry.getKey(),entry.getValue(),fcms.getCossim(index++));
+        // method 1
+        fcms.putPair();
+        System.out.println( "\nuse existed class functions\n");
+        for( int i = 0; i < fcms.getListLength(); i++){
+            System.out.printf( "Best Match for url:%s is url2:%s with cos sim:%f\n", fcms.getUrl(i), fcms.getUrl(fcms.getMacth(i)), fcms.getCossim(i) );
+        }
+
+        // method 2
+
+        fcms.iterCalc();
+        System.out.println( "\nuse iteration\n");
+        double[][] cached = fcms.getCachedResults();
+        for( int i = 0; i < fcms.getListLength(); i++){
+            double cossimi = 0.0;
+            int bestPair = 0;
+            for(int j = 0 ; j < fcms.getListLength();j++){
+                if(cached[i][j] > cossimi){
+                    cossimi = cached[i][j];
+                    bestPair = j;
+                }
+            }
+            System.out.printf( "Best Match for url:%s is url2:%s with cos sim:%f\n", fcms.getUrl(i), fcms.getUrl(bestPair), cossimi);
         }
     }
 
