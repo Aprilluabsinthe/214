@@ -146,6 +146,12 @@ public class FindClosestMatch {
         return maxSim;
     }
 
+    /**
+     * calcute cosine similarity between index1 and index2
+     * @param index1 the first index
+     * @param index2 the second index
+     * @return double similarity
+     */
     public double cosSimBetween(int index1, int index2){
         Document doc1 = getDoc(index1);
         Document doc2 = getDoc(index2);
