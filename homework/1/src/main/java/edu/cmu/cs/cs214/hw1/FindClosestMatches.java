@@ -43,23 +43,6 @@ public class FindClosestMatches {
         return this.fcm.getListLength();
     }
 
-    /**
-     * get document from list by index
-     * @param i index
-     * @return Document in list
-     */
-    public Document getDoc(int i) {
-        return this.fcm.getDoc(i);
-    }
-
-    /**
-     * get the index of one document in a list
-     * @param doc a given document
-     * @return index in i=list
-     */
-    public int getDocIndex(Document doc) {
-        return this.fcm.getDocIndex(doc);
-    }
 
     /**
      * give the index in list, return the String url
@@ -69,16 +52,6 @@ public class FindClosestMatches {
     public String getUrl(int i) {
         return this.fcm.getUrl(i);
     }
-
-    /**
-     * get the index in list
-     * @param url given website url
-     * @return index in list
-     */
-    public int getUrlIndex(String url) {
-        return this.fcm.getUrlIndex(url);
-    }
-
 
     /**
      * for visit private member cossinList
