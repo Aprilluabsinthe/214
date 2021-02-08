@@ -120,22 +120,8 @@ public class FindClosestMatches {
      * @param args argument
      */
     public static void main(String[] args){
-        String[] websites = {
-                "https://en.wikipedia.org/wiki/Bee-eater",
-                "https://en.wikipedia.org/wiki/Coraciidae",
-                "https://en.wikipedia.org/wiki/Aung_San_Suu_Kyi",
-                "https://en.wikipedia.org/wiki/Thein_Sein",
-                "https://en.wikipedia.org/wiki/Schloss_Freudenberg",
-                "https://en.wikipedia.org/wiki/Wiesbaden",
-                "https://en.wikipedia.org/wiki/1947_West_Virginia_State_Yellow_Jackets_football_team",
-                "https://en.wikipedia.org/wiki/1947_Howard_Bison_football_team",
-                "https://en.wikipedia.org/wiki/List_of_astronomical_interferometers_at_visible_and_infrared_wavelengths",
-                "https://en.wikipedia.org/wiki/List_of_telescope_types",
-                "https://en.wikipedia.org/wiki/Twelve_Point_Buck",
-                "https://en.wikipedia.org/wiki/UK_Independent_Singles_and_Albums_Charts",
-        };
 
-        FindClosestMatches fcms = new FindClosestMatches(websites);
+        FindClosestMatches fcms = new FindClosestMatches(args);
         // method 1
         fcms.putPair();
         System.out.println( "\nuse existed class functions\n");

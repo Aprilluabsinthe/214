@@ -163,17 +163,8 @@ public class FindClosestMatch {
    * @param args the list of strings from command line
    * */
   public static void main(String[] args){
-    String[] websites = {
-            "https://en.wikipedia.org/wiki/Bee-eater",
-            "https://en.wikipedia.org/wiki/Coraciidae",
-            "https://en.wikipedia.org/wiki/Aung_San_Suu_Kyi",
-            "https://en.wikipedia.org/wiki/Schloss_Freudenberg",
-            "https://en.wikipedia.org/wiki/1947_West_Virginia_State_Yellow_Jackets_football_team",
-            "https://en.wikipedia.org/wiki/List_of_astronomical_interferometers_at_visible_and_infrared_wavelengths",
-            "https://en.wikipedia.org/wiki/Twelve_Point_Buck"
-    };
 
-    FindClosestMatch fcm = new FindClosestMatch(websites);
+    FindClosestMatch fcm = new FindClosestMatch(args);
 
     double cosSim = fcm.bestFit();
     int[] index = fcm.getMinIndex();
